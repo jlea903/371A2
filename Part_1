@@ -1,0 +1,42 @@
+module Part_1 (Data_A, Data_B, Data_C, LD_A, LD_B, LD_C, output_sel, data_out);
+	input [7:0] Data_A;
+	input [7:0] Data_B;
+	input [15:0] Data_C;
+	input LD_A;
+	input LD_B;
+	input LD_C;
+	input [1:0] output_sel;
+	output [15:0] data_out;
+	wire [15:0] reg_A;
+	wire [15:0] reg_B;
+	wire [15:0] reg_C;
+	
+	regx A (LD_A, Data_A, reg_A);
+	regx B (LD_B, Data_B, reg_B);
+	regx C (LD_C, Data_C, reg_C);
+	
+	mux4to1 O (reg_A, reg_B, reg_C, 16'b0, output_sel, data_out);
+	
+endmodule
+
+
+module mux4to1 (w0, w1, w2, w3, S, f);
+	input [0:15] w0;
+	input [0:15] w1;
+	input [0:15] w2;
+	input [0:15] w3;
+	input [1:0] S;
+	output [15:0] f;
+
+	assign f = S[1] ? (S[0] ? w3 : w2) : (S[0] ? w1 : w0);
+
+endmodule
+
+module regx (S, D, f);
+	input S;
+	input [15:0] D;
+	output [15:0] f;
+	
+	assign f = S ? D : f;
+
+endmodule
