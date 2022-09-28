@@ -1,0 +1,52 @@
+int valueTop = 0;
+int valueBot = 0;
+bool top = 0;
+bool bot = 0;
+bool topOLD = 0;
+bool botOLD = 0;
+bool dir = 0; //0 = CW, 1 = CCW
+int count = 0;
+
+unsigned long oldMillis = 0;  //some global variables available anywhere in the program
+unsigned long currentMillis;
+
+void setup() {
+  Serial.begin(250000);           //  setup serial
+  currentMillis = millis();
+}
+
+void loop() {
+
+  while (millis() < 150000000) {
+    valueTop = analogRead(A1);  // read the input pin
+    valueBot = analogRead(A2);
+    topOLD = top;
+    top = signalConversion(valueTop);
+    botOLD = bot;
+    bot = signalConversion(valueBot);
+
+    if (topOLD==0 && botOLD==0 && bot==1) {
+      dir = 1;
+    } else if (topOLD==0 && botOLD==0 && top==1) {
+      dir = 0;
+    }
+
+    if (topOLD != top) {
+      count++;
+     
+    }
+
+  }
+}
+
+//Nothing 660
+//White minimum 57
+//Black minimum 250
+
+bool signalConversion(int value) {
+  if (value >= 200) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
